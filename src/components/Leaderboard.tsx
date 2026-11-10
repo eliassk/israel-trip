@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchBoard, submitScore, type Board } from '../lib/leaderboard'
 import { load, save } from '../lib/storage'
+import { tgName } from '../lib/telegram'
 
 interface Props {
   game: string
@@ -13,7 +14,7 @@ const MEDALS = ['🥇', '🥈', '🥉']
 
 export function Leaderboard({ game, pendingScore, unit }: Props) {
   const [board, setBoard] = useState<Board | null>(null)
-  const [name, setName] = useState(() => load('playerName', ''))
+  const [name, setName] = useState(() => tgName ?? load('playerName', ''))
   const [savedFor, setSavedFor] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -28,7 +29,7 @@ export function Leaderboard({ game, pendingScore, unit }: Props) {
     e.preventDefault()
     if (pendingScore == null || !name.trim() || busy) return
     setBusy(true)
-    save('playerName', name.trim())
+    if (!tgName) save('playerName', name.trim())
     setBoard(await submitScore(game, name.trim(), pendingScore))
     setSavedFor(pendingScore)
     setBusy(false)
@@ -43,8 +44,14 @@ export function Leaderboard({ game, pendingScore, unit }: Props) {
       </div>
       {pendingScore != null && savedFor !== pendingScore && (
         <form className="board__form" onSubmit={submit}>
-          <input id={`name-${game}`} value={name} onChange={e => setName(e.target.value)} placeholder="Twoje imię" maxLength={16} aria-label="Twoje imię" />
-          <button className="btn" type="submit" disabled={busy}>Zapisz {pendingScore}</button>
+          {tgName ? (
+            <button className="btn board__tg" type="submit" disabled={busy}>Zapisz {pendingScore} jako {tgName}</button>
+          ) : (
+            <>
+              <input id={`name-${game}`} value={name} onChange={e => setName(e.target.value)} placeholder="Twoje imię" maxLength={16} aria-label="Twoje imię" />
+              <button className="btn" type="submit" disabled={busy}>Zapisz {pendingScore}</button>
+            </>
+          )}
         </form>
       )}
       {board != null && scores.length === 0 ? (

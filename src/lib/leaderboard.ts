@@ -1,4 +1,5 @@
 import { load, save } from './storage'
+import { tg } from './telegram'
 
 export interface Score { id?: string; name: string; score: number; at: number }
 export interface Board { scores: Score[]; shared: boolean; myId?: string }
@@ -26,7 +27,8 @@ export async function submitScore(game: string, name: string, score: number): Pr
   try {
     const res = await fetch(`/api/scores/${game}`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      // Inside Telegram the server takes the player's name from this signed data, not from the body.
+      headers: { 'content-type': 'application/json', ...(tg ? { 'x-telegram-init-data': tg.initData } : {}) },
       body: JSON.stringify({ name, score }),
     })
     const body = await res.json()

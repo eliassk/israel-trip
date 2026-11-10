@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ToyProps } from '.'
 import { Stage } from './Stage'
 import { Leaderboard } from '../components/Leaderboard'
+import { haptic } from '../lib/telegram'
 
 const DURATION = 30
 const HEIGHT = 300
@@ -83,6 +84,7 @@ export function RangeGame({ onDone }: ToyProps) {
       delta = Math.max(20, Math.round(100 - (now - hit.born) / 15))
       text = `+${delta}`
     }
+    if (hit) haptic.tap()
     if (hit) setTargets(ts => ts.filter(t => t.id !== hit.id))
     setScore(s => Math.max(0, s + delta))
     setMarks(m => [...m.slice(-8), { id: now, x, y, text, bad: delta < 0 }])

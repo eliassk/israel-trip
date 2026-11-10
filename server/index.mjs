@@ -3,7 +3,7 @@
 import { createServer } from 'node:http'
 import { readFile, writeFile, rename, mkdir, stat } from 'node:fs/promises'
 import { join, extname, normalize } from 'node:path'
-import { randomUUID } from 'node:crypto'
+import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto'
 
 const PORT = Number(process.env.PORT ?? 8787)
 const DATA_DIR = process.env.DATA_DIR ?? new URL('../data', import.meta.url).pathname
@@ -13,6 +13,9 @@ const FILE = join(DATA_DIR, 'scores.json')
 const GAMES = new Set(['fishing', 'matkot', 'excavation', 'wallbuilder', 'haggle', 'olivepress', 'guess', 'range'])
 // Upper bounds a human can reach. Anything above is rejected as tampering.
 const MAX_SCORE = { fishing: 2000, matkot: 500, excavation: 1000, wallbuilder: 300, haggle: 220, olivepress: 2000, guess: 500, range: 6000 }
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? ''
+/** Signed Telegram data older than this MUST be rejected, so a captured request cannot be replayed forever. */
+const TELEGRAM_MAX_AGE_S = 24 * 60 * 60
 const TOP = 10
 const KEEP = 200
 
@@ -48,6 +51,27 @@ const json = (res, code, body) => {
   res.end(JSON.stringify(body))
 }
 
+// Checks the initData Telegram passes to a Mini App: https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
+function telegramUser(initData, botToken = BOT_TOKEN, now = Date.now()) {
+  if (!initData || !botToken) return null
+  const params = new URLSearchParams(initData)
+  const hash = params.get('hash')
+  if (!hash) return null
+  params.delete('hash')
+  const check = [...params.entries()].map(([k, v]) => `${k}=${v}`).sort().join('\n')
+  const secret = createHmac('sha256', 'WebAppData').update(botToken).digest()
+  const expected = createHmac('sha256', secret).update(check).digest()
+  const given = Buffer.from(hash, 'hex')
+  if (given.length !== expected.length || !timingSafeEqual(given, expected)) return null
+  if (now / 1000 - Number(params.get('auth_date')) > TELEGRAM_MAX_AGE_S) return null
+  try {
+    const user = JSON.parse(params.get('user') ?? '')
+    return user?.id ? user : null
+  } catch {
+    return null
+  }
+}
+
 async function readBody(req) {
   let raw = ''
   for await (const chunk of req) {
@@ -67,12 +91,15 @@ async function api(req, res, game) {
 
   let body
   try { body = await readBody(req) } catch { return json(res, 400, { error: 'Zły format' }) }
-  const name = String(body?.name ?? '').replace(/\s+/g, ' ').trim().slice(0, 16)
+  // A valid Telegram signature wins over whatever name the body claims.
+  const tg = telegramUser(req.headers['x-telegram-init-data'])
+  const typed = String(body?.name ?? '').replace(/\s+/g, ' ').trim().slice(0, 16)
+  const name = tg ? (tg.username ? `@${tg.username}` : String(tg.first_name ?? '').slice(0, 32)) : typed
   const score = Number(body?.score)
   if (!name) return json(res, 400, { error: 'Podaj imię' })
   if (!Number.isInteger(score) || score < 0 || score > MAX_SCORE[game]) return json(res, 400, { error: 'Nieprawidłowy wynik' })
 
-  const entry = { id: randomUUID(), name, score, at: Date.now() }
+  const entry = { id: randomUUID(), name, score, at: Date.now(), ...(tg ? { tg: tg.id } : {}) }
   scores[game] = [...(scores[game] ?? []), entry].sort((a, b) => b.score - a.score).slice(0, KEEP)
   persist()
   return json(res, 201, { id: entry.id, scores: top(game) })

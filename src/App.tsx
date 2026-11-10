@@ -6,6 +6,7 @@ import { useStamps } from './hooks/useStamps'
 import { confetti } from './lib/confetti'
 import { href, useRoute } from './lib/router'
 import { load, save } from './lib/storage'
+import { haptic, tg } from './lib/telegram'
 import { TabBar } from './components/TabBar'
 import { DiscoverPage } from './pages/DiscoverPage'
 import { PlacePage } from './pages/PlacePage'
@@ -29,9 +30,21 @@ export default function App() {
     })
   }, [route])
 
+  // Inside Telegram its own back button replaces the in-page arrows.
+  useEffect(() => {
+    if (!tg) return
+    const back = () => history.back()
+    const deep = route.page === 'place' || route.page === 'game'
+    if (deep) tg.BackButton.show()
+    else tg.BackButton.hide()
+    tg.BackButton.onClick(back)
+    return () => tg?.BackButton.offClick(back)
+  }, [route])
+
   const stamp = useCallback((id: PlaceId) => {
     if (stamps.has(id)) return
     add(id)
+    haptic.success()
     confetti(document.querySelector('.play'))
     if (stamps.size + 1 === PLACES.length) setTimeout(() => confetti(document.body, 120), 500)
   }, [add, stamps])

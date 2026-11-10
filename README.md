@@ -47,3 +47,16 @@ odkryjizrael.pl, www.odkryjizrael.pl {
    If the VPS has a reverse proxy installed directly on the host, run only the app (`docker compose up -d --build`, listens on `127.0.0.1:8787`) and point the proxy there.
 
 Update: `git pull`, then the same `up -d --build` command. Scores live in the `scores` Docker volume and survive rebuilds.
+
+## Telegram Mini App
+
+1. In @BotFather: `/newbot`, then `/newapp` (or the bot's Menu Button) with the URL `https://odkryjizrael.pl`.
+2. On the VPS, put the bot token in `.env` next to `docker-compose.yml` (never commit it):
+
+```
+TELEGRAM_BOT_TOKEN=123456:ABC...
+```
+
+3. Rebuild with the same `up -d --build` command.
+
+Inside Telegram the app uses Telegram's back button and haptics, and rankings use the player's `@username` (or first name). The server verifies Telegram's signature with the bot token, so the name cannot be faked. Outside Telegram, players still type a name.

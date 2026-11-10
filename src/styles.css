@@ -302,7 +302,7 @@ p { margin: 0; }
 .results__close { border: 0; background: none; color: var(--muted); font-weight: 600; text-decoration: underline; cursor: pointer; padding: 6px; }
 
 /* Cores */
-.core { position: absolute; inset: 0; }
+.core { position: absolute; inset: 0; z-index: 0; isolation: isolate; }  /* Keeps a game's own z-index layering below the shell's popups and results. */
 .core--tap { cursor: pointer; }
 .core--aim { cursor: crosshair; }
 .matkot__sea { position: absolute; left: 0; right: 0; top: 0; height: 14%; background: repeating-linear-gradient(90deg, transparent 0 30px, rgba(255, 255, 255, .25) 30px 46px); }

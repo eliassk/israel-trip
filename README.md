@@ -31,6 +31,19 @@ git clone https://github.com/eliassk/israel-trip.git && cd israel-trip
 docker compose -f docker-compose.yml -f docker-compose.caddy.yml up -d --build
 ```
 
-   If the VPS already has a reverse proxy, run only the app (`docker compose up -d --build`, listens on `127.0.0.1:8787`) and point the proxy there.
+   If another Caddy in Docker already owns 80/443 (for example Stream Manager's), join its network instead and add this site to that Caddyfile:
+
+```bash
+PROXY_NETWORK=stream-manager_default docker compose -f docker-compose.yml -f docker-compose.shared-proxy.yml up -d --build
+```
+
+```
+odkryjizrael.pl, www.odkryjizrael.pl {
+	encode gzip
+	reverse_proxy izrael:8787
+}
+```
+
+   If the VPS has a reverse proxy installed directly on the host, run only the app (`docker compose up -d --build`, listens on `127.0.0.1:8787`) and point the proxy there.
 
 Update: `git pull`, then the same `up -d --build` command. Scores live in the `scores` Docker volume and survive rebuilds.

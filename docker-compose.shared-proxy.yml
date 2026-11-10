@@ -1,0 +1,13 @@
+# Use when another Caddy on the VPS (e.g. Stream Manager's) already owns ports 80/443.
+# It joins that proxy's Docker network so the proxy can reach this app as `izrael:8787`.
+#   PROXY_NETWORK=<network> docker compose -f docker-compose.yml -f docker-compose.shared-proxy.yml up -d --build
+services:
+  izrael:
+    networks:
+      - default
+      - proxy
+
+networks:
+  proxy:
+    external: true
+    name: ${PROXY_NETWORK:?Set PROXY_NETWORK to the proxy's Docker network (see docker network ls)}

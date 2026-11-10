@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CoreProps } from '../types'
 
 /** Ball progress from which a tap counts as a hit (1 = at the player's paddle). */
 const HIT_FROM = 0.78
 const MISS_AT = 1.12
+const ARC = 60
 const CHEERS = ['Plask!', 'Tak!', 'Yalla!', 'Sababa!', 'Ale odbicie!', 'Kosmos!']
 
 interface Ball { p: number; dir: 1 | -1; v: number; x0: number; x1: number }
@@ -17,10 +18,16 @@ export function MatkotCore({ api }: CoreProps) {
   const geo = useRef({ w: 320, top: 70, bottom: 400 })
   const over = useRef(false)
   const hits = useRef(0)
+  // The zone is placed from the measured play area, so it needs a render after measuring.
+  const [zone, setZone] = useState<{ top: number; height: number } | null>(null)
 
   useEffect(() => {
     const el = root.current!
     geo.current = { w: el.clientWidth, top: 70, bottom: el.clientHeight - 90 }
+    // The zone covers where the ball is drawn (arc included) while a tap counts as a hit.
+    const drawnY = (p: number) => geo.current.top + p * (geo.current.bottom - geo.current.top) - Math.sin(Math.min(1, p) * Math.PI) * ARC
+    const zTop = drawnY(HIT_FROM) - 12
+    setZone({ top: zTop, height: drawnY(1.06) + 12 - zTop })
     let raf = 0
     const tick = () => {
       const b = ball.current
@@ -41,7 +48,7 @@ export function MatkotCore({ api }: CoreProps) {
       }
       const x = (b.dir > 0 ? b.x0 + (b.x1 - b.x0) * b.p : b.x1 + (b.x0 - b.x1) * (1 - b.p)) * w
       const y = top + b.p * (bottom - top)
-      const arc = Math.sin(Math.min(1, b.p) * Math.PI) * 60
+      const arc = Math.sin(Math.min(1, b.p) * Math.PI) * ARC
       if (ballEl.current) ballEl.current.style.transform = `translate(${x - 11}px,${y - 11 - arc}px)`
       if (shadowEl.current) shadowEl.current.style.transform = `translate(${x - 12}px,${y + 8}px) scale(${1 - arc / 120})`
       if (paddleEl.current) paddleEl.current.style.transform = `translate(${b.x1 * w - 28}px,${bottom - 12}px)`
@@ -69,11 +76,10 @@ export function MatkotCore({ api }: CoreProps) {
     paddleEl.current?.animate([{ rotate: '0deg' }, { rotate: '-35deg' }, { rotate: '0deg' }], { duration: 180 })
   }
 
-  const zoneTop = geo.current.top + HIT_FROM * (geo.current.bottom - geo.current.top)
   return (
     <div ref={root} className="core core--tap" onPointerDown={tap}>
       <div className="matkot__sea" />
-      <div className="matkot__zone" style={{ top: `calc(${zoneTop}px - 10px)` }} />
+      {zone && <div className="matkot__zone" style={{ top: zone.top, height: zone.height }} />}
       <div className="sprite matkot__opponent">🧔‍♂️</div>
       <div ref={shadowEl} className="sprite matkot__shadow" />
       <div ref={ballEl} className="sprite matkot__ball" />

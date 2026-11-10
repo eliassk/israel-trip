@@ -4,7 +4,7 @@ interface TelegramUser { id: number; first_name: string; last_name?: string; use
 
 interface WebApp {
   initData: string
-  initDataUnsafe: { user?: TelegramUser }
+  initDataUnsafe: { user?: TelegramUser; start_param?: string }
   ready(): void
   expand(): void
   setHeaderColor(color: string): void
@@ -23,6 +23,9 @@ const raw = window.Telegram?.WebApp
 export const tg: WebApp | null = raw && raw.initData ? raw : null
 
 export const tgUser = tg?.initDataUnsafe.user ?? null
+
+/** The `startapp` value from a t.me link, e.g. `gry-polow`. */
+export const tgStartParam = tg?.initDataUnsafe.start_param ?? null
 
 /** The name shown in rankings: @username, or the first name for users without one. */
 export const tgName = tgUser ? (tgUser.username ? `@${tgUser.username}` : tgUser.first_name) : null

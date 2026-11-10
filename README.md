@@ -16,18 +16,21 @@ npm run dev      # app on :5173, /api is proxied to :8787
 - `scripts/build-map.mjs`: regenerates map borders (`npm run map`).
 - `server/index.mjs`: serves `dist/` and `/api/scores/:game`. Scores are stored in `$DATA_DIR/scores.json`.
 
-## Deploy on a VPS
+## Deploy on a VPS (odkryjizrael.pl)
+
+1. DNS: point `odkryjizrael.pl` and `www.odkryjizrael.pl` (A record, and AAAA if the VPS has IPv6) to the VPS.
+2. On the VPS:
 
 ```bash
-docker compose up -d --build
+git clone https://github.com/eliassk/israel-trip.git && cd israel-trip
 ```
 
-The container listens on `127.0.0.1:8787`. Put a reverse proxy with HTTPS in front, for example Caddy:
+3. If nothing else on the VPS uses ports 80/443, run the app with the bundled Caddy. It gets HTTPS certificates by itself:
 
-```
-izrael.example.pl {
-  reverse_proxy 127.0.0.1:8787
-}
+```bash
+docker compose -f docker-compose.yml -f docker-compose.caddy.yml up -d --build
 ```
 
-Scores live in the `scores` Docker volume and survive rebuilds.
+   If the VPS already has a reverse proxy, run only the app (`docker compose up -d --build`, listens on `127.0.0.1:8787`) and point the proxy there.
+
+Update: `git pull`, then the same `up -d --build` command. Scores live in the `scores` Docker volume and survive rebuilds.

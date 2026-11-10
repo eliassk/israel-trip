@@ -1,0 +1,4 @@
+odkryjizrael.pl, www.odkryjizrael.pl {
+	encode gzip
+	reverse_proxy izrael:8787
+}

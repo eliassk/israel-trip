@@ -16,12 +16,12 @@ const launcher = (game: GameKey) => ({
 
 export const TOYS = {
   matkot: launcher('matkot'),
-  excavation: launcher('excavation'),
+  tunnel: launcher('tunnel'),
   fishing: launcher('fishing'),
   range: launcher('range'),
   olivepress: launcher('olivepress'),
   wallbuilder: launcher('wallbuilder'),
-  haggle: launcher('haggle'),
+  falafel: launcher('falafel'),
   bethesda: { title: 'Wskocz do sadzawki, kiedy woda się poruszy.', Component: BethesdaToy },
   sky: { title: 'Zgaś światła miasta i zobacz niebo nad pustynią.', Component: NightSkyToy },
   saltwater: { title: 'Dosyp soli do wody i zobacz, co się stanie.', Component: SaltwaterToy },

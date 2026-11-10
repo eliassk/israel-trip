@@ -21,7 +21,7 @@ export interface GameApi {
 
 export interface CoreProps { api: GameApi }
 
-export type GameKey = 'fishing' | 'matkot' | 'excavation' | 'wallbuilder' | 'range' | 'olivepress' | 'haggle'
+export type GameKey = 'fishing' | 'matkot' | 'tunnel' | 'wallbuilder' | 'range' | 'olivepress' | 'falafel'
 
 export interface GameDef {
   key: GameKey

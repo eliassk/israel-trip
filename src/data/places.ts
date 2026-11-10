@@ -65,7 +65,7 @@ export const PLACES: Place[] = [
     ],
     verse: { text: 'I zgromadziły ich na miejscu, które po hebrajsku nazywa się Harmagedon.', ref: 'Ap 16,16' },
     tip: 'Wygodne buty. Na wzgórzu jest mało cienia.',
-    toy: 'excavation',
+    toy: 'tunnel',
   },
   {
     id: 'sachne', name: 'Gan HaShlosha', region: 'Dolina Bet Szean', lat: 32.5, lon: 35.45,
@@ -225,8 +225,8 @@ export const PLACES: Place[] = [
     bible: [
       { event: "Nehemiasz zamyka bramy Jerozolimy, żeby kupcy nie handlowali w szabat", ref: "Ne 13,15-22" },
     ],
-    tip: 'Weź gotówkę w szeklach. Targowanie się to część zabawy.',
-    toy: 'haggle',
+    tip: 'Weź gotówkę w szeklach. Targowanie się to część zabawy, a falafel zjedz na stojąco jak miejscowi.',
+    toy: 'falafel',
   },
   {
     id: 'desert', name: 'Pustynia Judzka', region: 'Obóz na pustyni', lat: 31.42, lon: 35.2,

@@ -167,9 +167,6 @@ p { margin: 0; }
 .bob { animation: bob 1.8s ease-in-out infinite; }
 @keyframes bob { 50% { margin-top: 5px; } }
 
-.dig { position: absolute; inset: 48px 12px 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.dig__hole { position: relative; border: 0; border-radius: 50%; background: radial-gradient(ellipse at 50% 60%, #3d2a14 0 45%, #6e5333 70%); cursor: pointer; overflow: visible; touch-action: manipulation; }
-.dig__find { position: absolute; inset: 0; display: grid; place-items: center; font-size: 34px; animation: rise-find .18s ease-out; }
 @keyframes rise-find { from { transform: translateY(14px) scale(.5); opacity: 0; } }
 
 .subplaces { display: flex; flex-direction: column; gap: 10px; }
@@ -190,14 +187,6 @@ p { margin: 0; }
 .range__target--friend { background: #2f6fa8; border: 3px solid #fff; display: grid; place-items: center; font-size: 26px; }
 @keyframes popup-target { from { transform: scaleY(.1); } }
 .range__hole { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #2b2238; box-shadow: 0 0 0 2px rgba(0, 0, 0, .15); pointer-events: none; }
-.haggle { position: absolute; inset: 46px 12px 12px; display: flex; flex-direction: column; gap: 10px; color: #fff; }
-.haggle__seller { display: flex; gap: 8px; align-items: flex-start; font-size: 30px; }
-.haggle__seller span { font-size: 14px; font-weight: 600; background: #fff; color: #2a1c0b; border-radius: 12px; padding: 8px 10px; }
-.haggle__item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; background: rgba(255, 255, 255, .12); border-radius: 12px; padding: 8px 10px; font-size: 14px; }
-.haggle__emoji { font-size: 30px; }
-.haggle__mood { font-size: 14px; }
-.haggle__offer { font-size: 14px; }
-.haggle input { width: 100%; accent-color: #ef8a4f; }
 
 .star { position: absolute; border-radius: 50%; background: #fff; }
 .milkyway { position: absolute; left: -20%; top: 20%; width: 140%; height: 70px; transform: rotate(-20deg); background: radial-gradient(ellipse, rgba(200, 210, 255, .35), transparent 70%); filter: blur(6px); }
@@ -326,21 +315,12 @@ p { margin: 0; }
 .matkot__ball { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #ffd23f 40%, #e0a100); z-index: 2; }
 .matkot__shadow { width: 24px; height: 8px; border-radius: 50%; background: rgba(0, 0, 0, .25); }
 .matkot__paddle { width: 56px; height: 56px; border-radius: 50%; background: #1f6fb2; border: 5px solid #134a78; z-index: 1; }
-.dig { inset: 16px; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 14px; }
 .press__hint { position: absolute; left: 0; right: 0; bottom: 24px; text-align: center; font-weight: 800; text-shadow: 0 1px 3px rgba(0, 0, 0, .4); }
 .core .press__stone { width: 140px; height: 140px; left: calc(50% - 70px); top: calc(45% - 110px); }
 .core .press__basin { width: 260px; height: 96px; top: 45%; }
 .core .press__jar { width: 64px; height: 100px; right: 24px; bottom: 70px; }
 .range__hills { position: absolute; left: 0; right: 0; top: 18%; height: 8%; background: #b9a46f; }
 .core .range__target { width: 60px; height: 60px; margin: -30px 0 0 -30px; }
-.haggle { inset: 16px; position: absolute; display: flex; flex-direction: column; gap: 14px; color: #fff; }
-.haggle__stall { display: flex; justify-content: center; gap: 18px; font-size: 34px; }
-.haggle__stall span[data-done] { opacity: .3; }
-.haggle__face { font-size: 54px; }
-.haggle__bubble { font-size: 15px; font-weight: 600; background: #fff; color: #2a1c0b; border-radius: 14px; padding: 10px 12px; }
-.haggle__seller { display: flex; gap: 8px; align-items: flex-start; }
-.haggle__go { height: 54px; font-size: 17px; }
-.haggle__count { text-align: center; font-size: 13px; opacity: .7; }
 
 /* Passport medals */
 .medals { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
@@ -350,3 +330,30 @@ p { margin: 0; }
 .medals__name small { font-weight: 600; color: var(--muted); font-size: 12px; }
 .medals__medal { font-size: 26px; }
 .medals__medal[data-none] { font-size: 16px; color: var(--muted); }
+
+/* Tunnel runner */
+.tunnel { overflow: hidden; touch-action: none; }
+.tunnel__walls { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 60px, rgba(0, 0, 0, .25) 60px 64px), linear-gradient(90deg, #1a120a, transparent 12%, transparent 88%, #1a120a); }
+.tunnel__lane { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(255, 220, 160, .12); }
+.tunnel__lives { position: absolute; top: 10px; right: 12px; font-size: 20px; z-index: 3; }
+.tunnel__thing { font-size: 36px; will-change: transform; }
+.tunnel__player { font-size: 40px; transition: transform .1s; z-index: 2; }
+.tunnel__light { position: absolute; width: 360px; height: 360px; margin: -180px 0 0 -180px; background: radial-gradient(circle, rgba(255, 196, 110, .35), transparent 60%); pointer-events: none; transition: left .1s; }
+.tunnel__hint { position: absolute; left: 0; right: 0; bottom: 16px; text-align: center; font-size: 13px; font-weight: 700; opacity: .6; }
+
+/* Falafel stand */
+.falafel { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+.falafel__customer { display: flex; align-items: center; gap: 10px; }
+.falafel__face { font-size: 54px; }
+.falafel__bubble { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; background: #fff; border-radius: 16px; padding: 10px 12px; font-size: 30px; box-shadow: 0 3px 0 rgba(0, 0, 0, .2); }
+.falafel__bubble span[data-done] { opacity: .25; transform: scale(.85); }
+.falafel__patience { height: 8px; border-radius: 99px; background: rgba(255, 255, 255, .2); overflow: hidden; }
+.falafel__patience i { display: block; height: 100%; transform-origin: left; transition: transform .1s linear; }
+.falafel__pita { flex: 1; min-height: 90px; display: flex; align-items: center; justify-content: center; gap: 2px; font-size: 38px; }
+.falafel__base { font-size: 56px; }
+.falafel__layer { animation: rise-find .15s ease-out; }
+.falafel__bins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.falafel__bin { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 12px 4px; border: 0; border-radius: 16px; background: #f3e6c8; color: #3b2a1a; box-shadow: 0 4px 0 #b89a62; cursor: pointer; touch-action: manipulation; }
+.falafel__bin:active { transform: translateY(3px); box-shadow: 0 1px 0 #b89a62; }
+.falafel__bin span { font-size: 34px; }
+.falafel__bin small { font-size: 12px; font-weight: 700; }

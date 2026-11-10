@@ -1,11 +1,11 @@
 import type { GameDef, GameKey } from './types'
 import { FishingCore } from './cores/FishingCore'
 import { MatkotCore } from './cores/MatkotCore'
-import { ExcavationCore } from './cores/ExcavationCore'
+import { TunnelCore } from './cores/TunnelCore'
 import { WallCore } from './cores/WallCore'
 import { RangeCore } from './cores/RangeCore'
 import { OlivePressCore } from './cores/OlivePressCore'
-import { HaggleCore } from './cores/HaggleCore'
+import { FalafelCore } from './cores/FalafelCore'
 
 export const GAME_DEFS: Record<GameKey, GameDef> = {
   fishing: {
@@ -32,13 +32,13 @@ export const GAME_DEFS: Record<GameKey, GameDef> = {
     outro: 'Na plaży w Tel Awiwie stuk piłeczek matkot słychać od rana do nocy.',
     Core: MatkotCore,
   },
-  excavation: {
-    key: 'excavation', slug: 'wykopaliska', title: 'Wykopaliska w Megiddo', icon: '⛏️', place: 'megiddo',
-    rules: 'Łap znaleziska, zanim znikną: 🏺 1, 🪙🏹 2, 📜 5, 👑 10. Śmieci turystów 🥤🩴 to −3!',
-    unit: 'pkt', duration: 30, combo: true, medals: [60, 140, 250],
-    background: '#8a6a43',
-    outro: 'W Megiddo naprawdę znaleziono pieczęć sługi króla Jeroboama.',
-    Core: ExcavationCore,
+  tunnel: {
+    key: 'tunnel', slug: 'tunel', title: 'Tunel wodny Megiddo', icon: '🏃', place: 'megiddo',
+    rules: 'Oblężenie! Biegnij starożytnym tunelem po wodę. Stukaj lewą lub prawą stronę (albo przesuń palcem), żeby zmienić tor. Zbieraj dzbany 🏺, omijaj skały 🪨 i nietoperze 🦇. Masz 3 życia.',
+    unit: 'dzbanów', combo: true, medals: [15, 40, 80],
+    background: 'linear-gradient(#2a1d12, #4a3420)',
+    outro: 'Tunel w Megiddo wykuto w skale, żeby w czasie oblężenia mieszkańcy mieli dostęp do źródła poza murami.',
+    Core: TunnelCore,
   },
   wallbuilder: {
     key: 'wallbuilder', slug: 'mur', title: 'Mur Heroda', icon: '🧱', place: 'temple',
@@ -48,13 +48,13 @@ export const GAME_DEFS: Record<GameKey, GameDef> = {
     outro: 'Ściana Zachodnia ma 45 warstw kamieni, w tym 17 pod ziemią.',
     Core: WallCore,
   },
-  haggle: {
-    key: 'haggle', slug: 'targ', title: 'Targowanie na Machane Jehuda', icon: '🛍️', place: 'market',
-    rules: 'Kup 3 rzeczy jak najtaniej. Za niska oferta obraża sprzedawcę, a po 3 obrazach płacisz pełną cenę.',
-    unit: '₪', combo: false, medals: [40, 70, 100],
+  falafel: {
+    key: 'falafel', slug: 'falafel', title: 'Falafel na Machane Jehuda', icon: '🧆', place: 'market',
+    rules: 'Prowadzisz stoisko z falafelem w godzinie szczytu. Składaj pitę dokładnie w kolejności z dymka klienta. Im szybciej, tym większy napiwek!',
+    unit: '₪', duration: 45, combo: true, medals: [120, 300, 550],
     background: 'linear-gradient(#3b2a4a, #7a3b2e)',
-    outro: 'Na targu cena to dopiero początek rozmowy.',
-    Core: HaggleCore,
+    outro: 'W piątek przed szabatem kolejki do falafela na targu ciągną się przez pół ulicy.',
+    Core: FalafelCore,
   },
   olivepress: {
     key: 'olivepress', slug: 'tlocznia', title: 'Tłocznia w Getsemani', icon: '🫒', place: 'olives',
@@ -66,4 +66,4 @@ export const GAME_DEFS: Record<GameKey, GameDef> = {
   },
 }
 
-export const GAME_ORDER: GameKey[] = ['fishing', 'range', 'matkot', 'excavation', 'wallbuilder', 'haggle', 'olivepress']
+export const GAME_ORDER: GameKey[] = ['fishing', 'range', 'matkot', 'tunnel', 'wallbuilder', 'falafel', 'olivepress']

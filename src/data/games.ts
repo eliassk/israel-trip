@@ -19,9 +19,9 @@ const SHORT: Record<GameKey, string> = {
   fishing: '30 sekund z siecią. Złowisz więcej niż Piotr?',
   range: 'Refleks i rozwaga: trafiaj tarcze, oszczędzaj swoich.',
   matkot: 'Plażowe odbijanie bez siatki. Ile odbić wytrzymasz?',
-  excavation: 'Łap skarby, omijaj śmieci turystów.',
+  tunnel: 'Biegnij tunelem po wodę i nie wpadnij na skałę.',
   wallbuilder: 'Układaj kamienie jak budowniczowie świątyni.',
-  haggle: 'Kup taniej, ale nie obraź sprzedawcy.',
+  falafel: 'Składaj pity dla klientów, zanim stracą cierpliwość.',
   olivepress: '10 sekund szybkiego stukania.',
 }
 

@@ -119,6 +119,16 @@ export function GameShell({ def, onClose, onFinished }: Props) {
     say(text, at) {
       popup(text, at)
     },
+    announce(text) {
+      setBanner({ id: ++seq, text })
+      sound.combo()
+    },
+    addTime(seconds) {
+      // Moving the start forward lengthens the round without a second clock.
+      startedAt.current += seconds * 1000
+      popup(`+${seconds} s`, undefined)
+      sound.go()
+    },
     finish,
     elapsed: () => (startedAt.current ? (Date.now() - startedAt.current) / 1000 : 0),
     progress: () => (def.duration && startedAt.current ? Math.min(1, (Date.now() - startedAt.current) / 1000 / def.duration) : 0),

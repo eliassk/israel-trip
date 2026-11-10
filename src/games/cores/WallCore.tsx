@@ -3,6 +3,9 @@ import type { CoreProps } from '../types'
 
 const ROW = 28
 const BASE_W = 190
+const GROW = 12
+const QUAKE_EVERY = 10
+const QUAKE_SHIFT = 18
 
 interface Block { x: number; w: number }
 
@@ -13,6 +16,7 @@ export function WallCore({ api }: CoreProps) {
   const [size, setSize] = useState({ w: 320, h: 500 })
   const pos = useRef({ x: 0, v: 2.4, w: BASE_W })
   const over = useRef(false)
+  const perfects = useRef(0)
 
   useEffect(() => {
     const el = root.current!
@@ -49,9 +53,24 @@ export function WallCore({ api }: CoreProps) {
       api.finish()
       return
     }
-    // A near-perfect drop snaps into place, like a Herodian ashlar.
+    // A near-perfect drop snaps into place and the stone grows back a little, like a Herodian ashlar.
     const perfect = Math.abs(p.x - top.x) < 5
-    const placed = perfect ? { ...top } : { x: left, w: right - left }
+    perfects.current = perfect ? perfects.current + 1 : 0
+    let placed = perfect ? { ...top } : { x: left, w: right - left }
+    if (perfect && placed.w < BASE_W) {
+      const w = Math.min(BASE_W, placed.w + GROW)
+      placed = { x: placed.x - (w - placed.w) / 2, w }
+    }
+    const layers = blocks.length
+    // Every few layers an earthquake knocks the top stone sideways.
+    if (layers % QUAKE_EVERY === 0) {
+      const shift = (Math.random() < 0.5 ? -1 : 1) * QUAKE_SHIFT
+      placed = { ...placed, x: Math.max(0, Math.min(size.w - placed.w, placed.x + shift)) }
+      root.current?.animate([{ translate: '0 0' }, { translate: '-10px 4px' }, { translate: '9px -3px' }, { translate: '-6px 2px' }, { translate: '0 0' }], { duration: 500 })
+      api.announce('Trzęsienie ziemi!')
+    } else if (perfects.current === 3) {
+      api.announce('Mistrz kamieniarski!')
+    }
     setBlocks(b => [...b, placed])
     api.hit(1, at, perfect ? 'Idealnie!' : undefined)
     pos.current = { x: Math.random() < 0.5 ? 0 : size.w - placed.w, v: Math.min(8, Math.abs(p.v) * 1.06) * (Math.random() < 0.5 ? 1 : -1), w: placed.w }

@@ -280,7 +280,7 @@ p { margin: 0; }
 .shell__sparks i { position: absolute; width: 6px; height: 6px; margin: -3px; border-radius: 50%; background: #ffd23f; transform: rotate(var(--a)) translateX(0); animation: spark .5s ease-out forwards; }
 @keyframes spark { to { transform: rotate(var(--a)) translateX(42px) scale(.2); opacity: 0; } }
 @keyframes spark-life { to { opacity: 1; } }
-.shell__banner { position: absolute; left: 50%; top: 22%; translate: -50% 0; font: 800 40px var(--display); color: #ffd23f; text-shadow: 0 3px 0 #b85c00, 0 6px 16px rgba(0, 0, 0, .5); pointer-events: none; z-index: 6; white-space: nowrap; }
+.shell__banner { position: absolute; left: 50%; top: 22%; translate: -50% 0; width: 92%; text-align: center; text-wrap: balance; font: 800 clamp(26px, 8vw, 40px)/1.1 var(--display); color: #ffd23f; text-shadow: 0 3px 0 #b85c00, 0 6px 16px rgba(0, 0, 0, .5); pointer-events: none; z-index: 6; }
 .shell__count { position: absolute; inset: 0; display: grid; place-items: center; font: 800 110px var(--display); color: #fff; text-shadow: 0 6px 24px rgba(0, 0, 0, .45); z-index: 7; pointer-events: none; }
 .shell__dim { position: absolute; inset: 0; background: rgba(0, 0, 0, .25); z-index: 6; }
 
@@ -307,16 +307,23 @@ p { margin: 0; }
 .core--aim { cursor: crosshair; }
 .matkot__sea { position: absolute; left: 0; right: 0; top: 0; height: 14%; background: repeating-linear-gradient(90deg, transparent 0 30px, rgba(255, 255, 255, .25) 30px 46px); }
 .matkot__zone { position: absolute; left: 0; right: 0; background: rgba(255, 255, 255, .35); border-block: 2px dashed rgba(255, 255, 255, .85); }
-.matkot__opponent { left: 50%; top: 18%; font-size: 44px; translate: -50% 0; }
+.matkot__opponent { left: 50%; top: 4%; font-size: 44px; translate: -50% 0; }
 .matkot__ball { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #ffd23f 40%, #e0a100); z-index: 2; }
 .matkot__shadow { width: 24px; height: 8px; border-radius: 50%; background: rgba(0, 0, 0, .25); }
-.matkot__paddle { width: 56px; height: 56px; border-radius: 50%; background: #1f6fb2; border: 5px solid #134a78; z-index: 1; }
+.matkot__paddle { top: auto; bottom: 40px; width: 56px; height: 56px; border-radius: 50%; background: #1f6fb2; border: 5px solid #134a78; z-index: 1; transition: left .1s ease-out; }
+.matkot__paddle[data-side='left'] { left: calc(25% - 28px); }
+.matkot__paddle[data-side='right'] { left: calc(75% - 28px); }
+.matkot__zone span { position: absolute; top: 0; bottom: 0; left: 50%; border-left: 2px dashed rgba(255, 255, 255, .85); }
+.matkot__crowd { position: absolute; top: 15%; left: 8px; right: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; font-size: 22px; }
+.matkot__crowd span { animation: cheer .6s ease-in-out infinite alternate; }
+@keyframes cheer { to { translate: 0 -4px; } }
+.matkot__wind { position: absolute; top: 8px; left: 12px; font-weight: 800; color: #1d2a33; background: rgba(255, 255, 255, .7); padding: 2px 10px; border-radius: 99px; z-index: 3; }
 .press__hint { position: absolute; left: 0; right: 0; bottom: 24px; text-align: center; font-weight: 800; text-shadow: 0 1px 3px rgba(0, 0, 0, .4); }
 .core .press__stone { width: 140px; height: 140px; left: calc(50% - 70px); top: calc(45% - 110px); }
 .core .press__basin { width: 260px; height: 96px; top: 45%; }
 .core .press__jar { width: 64px; height: 100px; right: 24px; bottom: 70px; }
 .range__hills { position: absolute; left: 0; right: 0; top: 18%; height: 8%; background: #b9a46f; }
-.core .range__target { width: 60px; height: 60px; margin: -30px 0 0 -30px; }
+.range__round { position: absolute; top: 8px; left: 12px; font-weight: 800; font-size: 13px; color: #1d2a33; background: rgba(255, 255, 255, .7); padding: 2px 10px; border-radius: 99px; }
 
 /* Passport medals */
 .medals { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
@@ -359,3 +366,22 @@ p { margin: 0; }
 .falafel__bin:active { transform: translateY(3px); box-shadow: 0 1px 0 #b89a62; }
 .falafel__bin span { font-size: 34px; }
 .falafel__bin small { font-size: 12px; font-weight: 700; }
+
+/* Fishing extras */
+.fishing { transition: background .6s, filter .6s; }
+.fishing--storm { filter: brightness(.6) saturate(.8); }
+.fishing__boat { position: absolute; top: 8px; left: 50%; font-size: 48px; translate: -50% 0; animation: sway 3s ease-in-out infinite alternate; transform-origin: bottom center; }
+.fishing--storm .fishing__boat { animation-duration: .5s; }
+.fishing__rain { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(105deg, transparent 0 14px, rgba(255, 255, 255, .25) 14px 15px); background-size: 200% 200%; animation: rain .35s linear infinite; }
+@keyframes rain { to { background-position: -30px 60px; } }
+.fish[data-kind='time'] { filter: drop-shadow(0 0 6px #ffd23f) drop-shadow(0 0 12px #ffd23f); }
+.fish[data-kind='time']::after { content: '⏳'; position: absolute; top: -14px; left: 6px; font-size: 14px; }
+
+/* Olive press rhythm */
+.press__ring { position: absolute; left: 50%; top: calc(45% - 40px); width: 140px; height: 140px; margin: -70px 0 0 -70px; border: 4px solid #fff; border-radius: 50%; pointer-events: none; animation: press-ring linear forwards; }
+@keyframes press-ring { from { transform: scale(2.2); opacity: .2; } to { transform: scale(1); opacity: 1; } }
+
+/* Falafel extras */
+.falafel--rush { box-shadow: inset 0 0 0 4px #ffd23f; }
+.falafel--vip .falafel__face { filter: drop-shadow(0 0 10px #ffd23f); }
+.falafel--vip .falafel__bubble { box-shadow: 0 0 0 3px #ffd23f, 0 3px 0 rgba(0, 0, 0, .2); }

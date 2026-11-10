@@ -22,7 +22,7 @@ const SHORT: Record<GameKey, string> = {
   tunnel: 'Biegnij tunelem po wodę i nie wpadnij na skałę.',
   wallbuilder: 'Układaj kamienie jak budowniczowie świątyni.',
   falafel: 'Składaj pity dla klientów, zanim stracą cierpliwość.',
-  olivepress: '10 sekund szybkiego stukania.',
+  olivepress: 'Kręć kamieniem w rytmie.',
 }
 
 export const GAMES: Record<GameId, Game> = {

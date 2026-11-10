@@ -11,19 +11,27 @@ const INGREDIENTS = [
 ] as const
 const CUSTOMERS = ['👨‍🦱', '👩', '👴', '👧', '🧔', '👩‍🦰', '👨‍🦳', '🧕']
 const BASE_POINTS = 10
+const VIP_EVERY = 5
+const VIP = '🤵'
+/** The last seconds before Shabbat: every order pays double. */
+const RUSH_FROM = 0.78
 
-interface Order { id: number; face: string; items: number[]; born: number; until: number }
+interface Order { id: number; face: string; items: number[]; born: number; until: number; vip: boolean }
 
-const newOrder = (progress: number): Order => {
+const newOrder = (progress: number, count: number): Order => {
   const size = 2 + Math.floor(Math.random() * (2 + progress * 2))
   const items = Array.from({ length: Math.min(5, size) }, () => Math.floor(Math.random() * INGREDIENTS.length))
   const now = Date.now()
   // Customers get less patient as the rush goes on.
-  return { id: now, face: CUSTOMERS[Math.floor(Math.random() * CUSTOMERS.length)], items, born: now, until: now + (9000 - progress * 4000) }
+  const vip = count > 0 && count % VIP_EVERY === 0
+  return { id: now, face: vip ? VIP : CUSTOMERS[Math.floor(Math.random() * CUSTOMERS.length)], items, born: now, until: now + (9000 - progress * 4000), vip }
 }
 
 export function FalafelCore({ api }: CoreProps) {
-  const [order, setOrder] = useState<Order>(() => newOrder(0))
+  const count = useRef(0)
+  const rushOn = useRef(false)
+  const [rush, setRush] = useState(false)
+  const [order, setOrder] = useState<Order>(() => newOrder(0, 0))
   const [built, setBuilt] = useState<number[]>([])
   const [now, setNow] = useState(Date.now())
   const orderRef = useRef(order)
@@ -33,9 +41,14 @@ export function FalafelCore({ api }: CoreProps) {
     const iv = setInterval(() => {
       const t = Date.now()
       setNow(t)
+      if (!rushOn.current && api.progress() >= RUSH_FROM) {
+        rushOn.current = true
+        setRush(true)
+        api.announce('Za chwilę szabat! Napiwki ×2')
+      }
       if (t > orderRef.current.until) {
         api.miss(0, undefined, 'Klient odszedł…')
-        setOrder(newOrder(api.progress()))
+        setOrder(newOrder(api.progress(), ++count.current))
         setBuilt([])
       }
     }, 100)
@@ -57,14 +70,18 @@ export function FalafelCore({ api }: CoreProps) {
     if (nb.length < order.items.length) return
     // Faster service earns a bigger tip.
     const left = Math.max(0, order.until - Date.now()) / (order.until - order.born)
-    api.hit(BASE_POINTS + Math.round(left * 10), { x: root.width / 2, y: 120 }, undefined)
-    setOrder(newOrder(api.progress()))
+    // VIPs and the pre-Shabbat rush each double the tip.
+    const tip = (BASE_POINTS + Math.round(left * 10)) * (order.vip ? 2 : 1) * (rushOn.current ? 2 : 1)
+    api.hit(tip, { x: root.width / 2, y: 120 }, order.vip ? `VIP! +${tip}` : undefined)
+    const upcoming = newOrder(api.progress(), ++count.current)
+    if (upcoming.vip) api.announce('Klient VIP! Napiwek ×2')
+    setOrder(upcoming)
     setBuilt([])
   }
 
   const patience = Math.max(0, (order.until - now) / (order.until - order.born))
   return (
-    <div className="core falafel">
+    <div className={`core falafel${rush ? ' falafel--rush' : ''}${order.vip ? ' falafel--vip' : ''}`}>
       <div className="falafel__customer">
         <span className="falafel__face">{order.face}</span>
         <div className="falafel__bubble">

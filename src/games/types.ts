@@ -11,6 +11,10 @@ export interface GameApi {
   miss(penalty?: number, at?: Point, label?: string): void
   /** A neutral message that does not touch the score. */
   say(text: string, at?: Point): void
+  /** A big centred banner for events (a storm, a new round). */
+  announce(text: string): void
+  /** Adds seconds to a timed round. */
+  addTime(seconds: number): void
   /** Ends the round. Timed games end on their own. */
   finish(): void
   /** Seconds since the round started. */

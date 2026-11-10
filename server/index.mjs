@@ -17,6 +17,8 @@ const MAX_SCORE = { fishing: 3000, matkot: 500, tunnel: 2000, wallbuilder: 300, 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? ''
 /** Signed Telegram data older than this MUST be rejected, so a captured request cannot be replayed forever. */
 const TELEGRAM_MAX_AGE_S = 24 * 60 * 60
+/** Optional override, e.g. https://t.me/OdkryjIzraelBot/odkryj. Without it the bot's Main Mini App link is used. */
+const TELEGRAM_APP_URL = process.env.TELEGRAM_APP_URL ?? ''
 const TOP = 10
 const KEEP = 200
 
@@ -82,6 +84,20 @@ async function readBody(req) {
   return JSON.parse(raw)
 }
 
+// Looks up the bot's username once, so the link always matches the bot the token belongs to.
+let appUrl = TELEGRAM_APP_URL || null
+async function telegramAppUrl() {
+  if (appUrl || !BOT_TOKEN) return appUrl
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getMe`)
+    const { ok, result } = await r.json()
+    if (ok && result?.username) appUrl = `https://t.me/${result.username}`
+  } catch (err) {
+    console.error('getMe failed', err.message)
+  }
+  return appUrl
+}
+
 async function api(req, res, game) {
   if (!GAMES.has(game)) return json(res, 404, { error: 'Nieznana gra' })
   if (req.method === 'GET') return json(res, 200, { scores: top(game) })
@@ -126,6 +142,7 @@ async function serveStatic(res, path) {
 
 createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x')
+  if (url.pathname === '/api/config') return json(res, 200, { telegramApp: await telegramAppUrl() })
   const m = url.pathname.match(/^\/api\/scores\/([a-z]+)$/)
   if (m) return api(req, res, m[1])
   if (url.pathname.startsWith('/api/')) return json(res, 404, { error: 'Not found' })

@@ -7,6 +7,7 @@ services:
     environment:
       # Set in .env next to this file. MUST NOT be committed.
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_APP_URL: ${TELEGRAM_APP_URL:-}
     volumes:
       - scores:/data
 

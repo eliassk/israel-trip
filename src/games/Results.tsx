@@ -5,8 +5,7 @@ import { submitScore, type Board } from '../lib/leaderboard'
 import { load, save } from '../lib/storage'
 import { tgName } from '../lib/telegram'
 import { sound } from '../lib/sound'
-import { shareChallenge } from '../lib/share'
-import { TELEGRAM_APP_URL } from '../config'
+import { challengeUrl, shareChallenge } from '../lib/share'
 
 interface Props { def: GameDef; score: number; record: boolean; onAgain: () => void; onClose: () => void }
 
@@ -59,9 +58,7 @@ export function Results({ def, score, record, onAgain, onClose }: Props) {
   const above = rank > 0 ? board!.scores[rank - 1] : null
 
   const challenge = async () => {
-    const url = TELEGRAM_APP_URL
-      ? `${TELEGRAM_APP_URL}?startapp=gry-${def.slug}`
-      : `${location.origin}${location.pathname}#/gry/${def.slug}`
+    const url = await challengeUrl(`gry/${def.slug}`)
     const r = await shareChallenge(`${def.icon} ${def.title}: mam ${score} ${def.unit}! Pobijesz mnie?`, url)
     setShareMsg(r === 'copied' ? 'Skopiowano link. Wklej go znajomym.' : r === 'failed' ? 'Nie udało się udostępnić.' : '')
   }

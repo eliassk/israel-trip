@@ -57,6 +57,7 @@ Update: `git pull`, then the same `up -d --build` command. Scores live in the `s
 TELEGRAM_BOT_TOKEN=123456:ABC...
 ```
 
-3. Rebuild with the same `up -d --build` command.
+3. In @BotFather, open the bot's settings and set this app as its **Main Mini App**. Challenge links then look like `t.me/YourBot?startapp=gry-polow` and open that game directly. To use a named app link instead, add `TELEGRAM_APP_URL=https://t.me/YourBot/odkryj` to `.env`.
+4. Rebuild with the same `up -d --build` command.
 
 Inside Telegram the app uses Telegram's back button and haptics, and rankings use the player's `@username` (or first name). The server verifies Telegram's signature with the bot token, so the name cannot be faked. Outside Telegram, players still type a name.

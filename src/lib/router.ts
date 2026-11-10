@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { placeById, type PlaceId } from '../data/places'
 import { GAMES, type GameId } from '../data/games'
 
+
 export type Route =
   | { page: 'discover' }
   | { page: 'place'; id: PlaceId }

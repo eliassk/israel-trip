@@ -1,6 +1,8 @@
 import type { PlaceId } from './places'
+import type { GameKey } from '../games/types'
+import { GAME_DEFS, GAME_ORDER } from '../games/registry'
 
-export type GameId = 'polow' | 'strzelnica' | 'matkot' | 'wykopaliska' | 'mur' | 'targ' | 'tlocznia' | 'gdzie' | 'kolejka'
+export type GameId = string
 
 export interface Game {
   title: string
@@ -9,18 +11,27 @@ export interface Game {
   /** Playing this game earns the stamp of this place. */
   place?: PlaceId
   ranked: boolean
+  /** Set for games that run in the full-screen shell. */
+  shell?: GameKey
+}
+
+const SHORT: Record<GameKey, string> = {
+  fishing: '30 sekund z siecią. Złowisz więcej niż Piotr?',
+  range: 'Refleks i rozwaga: trafiaj tarcze, oszczędzaj swoich.',
+  matkot: 'Plażowe odbijanie bez siatki. Ile odbić wytrzymasz?',
+  excavation: 'Łap skarby, omijaj śmieci turystów.',
+  wallbuilder: 'Układaj kamienie jak budowniczowie świątyni.',
+  haggle: 'Kup taniej, ale nie obraź sprzedawcy.',
+  olivepress: '10 sekund szybkiego stukania.',
 }
 
 export const GAMES: Record<GameId, Game> = {
-  polow: { title: 'Połów na Jeziorze Galilejskim', blurb: '30 sekund z siecią. Złowisz więcej niż Piotr?', icon: '🐟', place: 'galilee', ranked: true },
-  strzelnica: { title: 'Strzelnica Caliber 3', blurb: 'Refleks i rozwaga: trafiaj tarcze, oszczędzaj swoich.', icon: '🎯', place: 'caliber', ranked: true },
-  matkot: { title: 'Matkot w Tel Awiwie', blurb: 'Plażowe odbijanie bez siatki. Ile odbić wytrzymasz?', icon: '🏓', place: 'jaffa', ranked: true },
-  wykopaliska: { title: 'Wykopaliska w Megiddo', blurb: 'Łap skarby, omijaj śmieci turystów.', icon: '⛏️', place: 'megiddo', ranked: true },
-  mur: { title: 'Mur Heroda', blurb: 'Układaj kamienie jak budowniczowie świątyni.', icon: '🧱', place: 'temple', ranked: true },
-  targ: { title: 'Targowanie na Machane Jehuda', blurb: 'Kup taniej, ale nie obraź sprzedawcy.', icon: '🛍️', place: 'market', ranked: true },
-  tlocznia: { title: 'Tłocznia w Getsemani', blurb: '10 sekund szybkiego stukania.', icon: '🫒', place: 'olives', ranked: true },
+  ...Object.fromEntries(GAME_ORDER.map(k => {
+    const d = GAME_DEFS[k]
+    return [d.slug, { title: d.title, blurb: SHORT[k], icon: d.icon, place: d.place, ranked: true, shell: k }]
+  })),
   gdzie: { title: 'Gdzie to jest?', blurb: 'Stuknij na mapie, gdzie leży miejsce.', icon: '📍', ranked: true },
   kolejka: { title: 'Kolejka górska wysokości', blurb: 'Zjedź autobusem z Golanu nad Morze Martwe.', icon: '🚌', ranked: false },
 }
 
-export const GAME_IDS = Object.keys(GAMES) as GameId[]
+export const GAME_IDS = Object.keys(GAMES)

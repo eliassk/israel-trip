@@ -12,7 +12,8 @@ const FILE = join(DATA_DIR, 'scores.json')
 
 const GAMES = new Set(['fishing', 'matkot', 'excavation', 'wallbuilder', 'haggle', 'olivepress', 'guess', 'range'])
 // Upper bounds a human can reach. Anything above is rejected as tampering.
-const MAX_SCORE = { fishing: 2000, matkot: 500, excavation: 1000, wallbuilder: 300, haggle: 220, olivepress: 2000, guess: 500, range: 6000 }
+// Combos multiply points by up to 4, so the limits leave room for that.
+const MAX_SCORE = { fishing: 3000, matkot: 500, excavation: 4000, wallbuilder: 300, haggle: 220, olivepress: 2000, guess: 500, range: 20000 }
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? ''
 /** Signed Telegram data older than this MUST be rejected, so a captured request cannot be replayed forever. */
 const TELEGRAM_MAX_AGE_S = 24 * 60 * 60

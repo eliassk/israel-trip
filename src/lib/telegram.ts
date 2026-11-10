@@ -9,6 +9,7 @@ interface WebApp {
   expand(): void
   setHeaderColor(color: string): void
   setBackgroundColor(color: string): void
+  openTelegramLink(url: string): void
   BackButton: { show(): void; hide(): void; onClick(cb: () => void): void; offClick(cb: () => void): void }
   HapticFeedback: { impactOccurred(style: 'light' | 'medium' | 'heavy'): void; notificationOccurred(type: 'success' | 'error' | 'warning'): void }
 }

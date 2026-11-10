@@ -189,6 +189,12 @@ p { margin: 0; }
 .pool__btn { position: absolute; right: 12px; top: 40%; }
 .ashlar { position: absolute; border-radius: 3px; background: #e3d2a6; box-shadow: inset 0 0 0 3px #f2e6c4, inset 0 0 0 4px #b89f6b; }
 .ashlar--moving { background: #f0e2b8; }
+.range__target { position: absolute; width: 50px; height: 50px; margin: -25px 0 0 -25px; border-radius: 50%; background: radial-gradient(circle, #c8553d 0 18%, #fdf6ea 18% 36%, #c8553d 36% 54%, #fdf6ea 54% 72%, #c8553d 72%); box-shadow: 0 3px 0 #5a4a33; animation: popup-target .15s ease-out; pointer-events: none; }
+.range__target--friend { background: #2f6fa8; border: 3px solid #fff; display: grid; place-items: center; font-size: 26px; }
+@keyframes popup-target { from { transform: scaleY(.1); } }
+.range__hole { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #2b2238; box-shadow: 0 0 0 2px rgba(0, 0, 0, .15); pointer-events: none; }
+.range__flash { position: absolute; inset: 0; background: rgba(200, 40, 40, .35); animation: fade-out .5s forwards; pointer-events: none; }
+@keyframes fade-out { to { opacity: 0; } }
 .haggle { position: absolute; inset: 46px 12px 12px; display: flex; flex-direction: column; gap: 10px; color: #fff; }
 .haggle__seller { display: flex; gap: 8px; align-items: flex-start; font-size: 30px; }
 .haggle__seller span { font-size: 14px; font-weight: 600; background: #fff; color: #2a1c0b; border-radius: 12px; padding: 8px 10px; }

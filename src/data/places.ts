@@ -135,7 +135,7 @@ export const PLACES: Place[] = [
       'Ośrodek leży w górach na południe od Jerozolimy.',
     ],
     tip: 'Wygodne, zakryte buty. Obowiązują ścisłe zasady bezpieczeństwa.',
-    quiz: { question: 'Na jakiej wysokości leżą Góry Judzkie wokół Gush Etzion?', answers: ['ok. 100 m', 'ok. 950 m', 'ok. 3000 m'], correct: 1 },
+    toy: 'range',
   },
   {
     id: 'jerusalem', name: 'Jerozolima', region: 'Góry Judzkie', lat: 31.777, lon: 35.235,

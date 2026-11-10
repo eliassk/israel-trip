@@ -1,6 +1,6 @@
 import type { PlaceId } from './places'
 
-export type GameId = 'polow' | 'matkot' | 'wykopaliska' | 'mur' | 'targ' | 'tlocznia' | 'gdzie' | 'kolejka'
+export type GameId = 'polow' | 'strzelnica' | 'matkot' | 'wykopaliska' | 'mur' | 'targ' | 'tlocznia' | 'gdzie' | 'kolejka'
 
 export interface Game {
   title: string
@@ -13,6 +13,7 @@ export interface Game {
 
 export const GAMES: Record<GameId, Game> = {
   polow: { title: 'Połów na Jeziorze Galilejskim', blurb: '30 sekund z siecią. Złowisz więcej niż Piotr?', icon: '🐟', place: 'galilee', ranked: true },
+  strzelnica: { title: 'Strzelnica Caliber 3', blurb: 'Refleks i rozwaga: trafiaj tarcze, oszczędzaj swoich.', icon: '🎯', place: 'caliber', ranked: true },
   matkot: { title: 'Matkot w Tel Awiwie', blurb: 'Plażowe odbijanie bez siatki. Ile odbić wytrzymasz?', icon: '🏓', place: 'jaffa', ranked: true },
   wykopaliska: { title: 'Wykopaliska w Megiddo', blurb: 'Łap skarby, omijaj śmieci turystów.', icon: '⛏️', place: 'megiddo', ranked: true },
   mur: { title: 'Mur Heroda', blurb: 'Układaj kamienie jak budowniczowie świątyni.', icon: '🧱', place: 'temple', ranked: true },

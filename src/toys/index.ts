@@ -6,6 +6,7 @@ import { OlivePressGame } from './OlivePressGame'
 import { BethesdaToy } from './BethesdaToy'
 import { WallBuilderGame } from './WallBuilderGame'
 import { HaggleGame } from './HaggleGame'
+import { RangeGame } from './RangeGame'
 import { NightSkyToy } from './NightSkyToy'
 import { SaltwaterToy } from './SaltwaterToy'
 
@@ -18,6 +19,7 @@ export const TOYS = {
   olivepress: { title: 'Tłocznia oliwy: 10 sekund, ile oliwy wyciśniesz?', Component: OlivePressGame },
   bethesda: { title: 'Wskocz do sadzawki, kiedy woda się poruszy.', Component: BethesdaToy },
   wallbuilder: { title: 'Zbuduj mur Heroda. Ile warstw ułożysz?', Component: WallBuilderGame },
+  range: { title: 'Strzelnica: trafiaj szybko, ale nie swoich!', Component: RangeGame },
   haggle: { title: 'Potarguj się na targu. Ile zaoszczędzisz?', Component: HaggleGame },
   sky: { title: 'Zgaś światła miasta i zobacz niebo nad pustynią.', Component: NightSkyToy },
   saltwater: { title: 'Dosyp soli do wody i zobacz, co się stanie.', Component: SaltwaterToy },

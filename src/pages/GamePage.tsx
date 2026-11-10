@@ -7,6 +7,7 @@ import { ExcavationGame } from '../toys/ExcavationGame'
 import { WallBuilderGame } from '../toys/WallBuilderGame'
 import { HaggleGame } from '../toys/HaggleGame'
 import { OlivePressGame } from '../toys/OlivePressGame'
+import { RangeGame } from '../toys/RangeGame'
 import { GuessGame } from '../components/GuessGame'
 import { AltitudeCoaster } from '../components/AltitudeCoaster'
 
@@ -18,6 +19,7 @@ export function GamePage({ id, onStamp }: Props) {
     polow: <FishingGame onDone={onStamp} />,
     matkot: <MatkotGame onDone={onStamp} />,
     wykopaliska: <ExcavationGame onDone={onStamp} />,
+    strzelnica: <RangeGame onDone={onStamp} />,
     mur: <WallBuilderGame onDone={onStamp} />,
     targ: <HaggleGame onDone={onStamp} />,
     tlocznia: <OlivePressGame onDone={onStamp} />,

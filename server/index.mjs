@@ -10,9 +10,9 @@ const DATA_DIR = process.env.DATA_DIR ?? new URL('../data', import.meta.url).pat
 const DIST = new URL('../dist', import.meta.url).pathname
 const FILE = join(DATA_DIR, 'scores.json')
 
-const GAMES = new Set(['fishing', 'matkot', 'excavation', 'wallbuilder', 'haggle', 'olivepress', 'guess'])
+const GAMES = new Set(['fishing', 'matkot', 'excavation', 'wallbuilder', 'haggle', 'olivepress', 'guess', 'range'])
 // Upper bounds a human can reach. Anything above is rejected as tampering.
-const MAX_SCORE = { fishing: 2000, matkot: 500, excavation: 1000, wallbuilder: 300, haggle: 220, olivepress: 2000, guess: 500 }
+const MAX_SCORE = { fishing: 2000, matkot: 500, excavation: 1000, wallbuilder: 300, haggle: 220, olivepress: 2000, guess: 500, range: 6000 }
 const TOP = 10
 const KEEP = 200
 

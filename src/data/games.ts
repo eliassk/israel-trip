@@ -31,7 +31,7 @@ export const GAMES: Record<GameId, Game> = {
     return [d.slug, { title: d.title, blurb: SHORT[k], icon: d.icon, place: d.place, ranked: true, shell: k }]
   })),
   gdzie: { title: 'Gdzie to jest?', blurb: 'Stuknij na mapie, gdzie leży miejsce.', icon: '📍', ranked: true },
-  kolejka: { title: 'Kolejka górska wysokości', blurb: 'Zjedź autobusem z Golanu nad Morze Martwe.', icon: '🚌', ranked: false },
+  kolejka: { title: 'Kolejka górska wysokości', blurb: 'Przejedź autobusem całą trasę, w górę i w dół.', icon: '🚌', ranked: false },
 }
 
 export const GAME_IDS = Object.keys(GAMES)

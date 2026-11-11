@@ -10,7 +10,7 @@ import { FalafelCore } from './cores/FalafelCore'
 export const GAME_DEFS: Record<GameKey, GameDef> = {
   fishing: {
     key: 'fishing', slug: 'polow', title: 'Połów na Jeziorze Galilejskim', icon: '🐟', place: 'galilee',
-    rules: 'Stukaj w wodę, żeby zarzucić sieć. 🐟 to 1 ryba, 🐠 to 5, świecąca ryba z ⏳ daje +3 sekundy. W połowie przyjdzie burza! Puste zarzucenie kosztuje rybę, seria trafień daje mnożnik.',
+    rules: 'Stukaj w wodę, żeby zarzucić sieć. 🐟 to 1 ryba, 🐡 to 2, 🐠 to 5, świecąca ryba z ⏳ daje +3 sekundy. W połowie przyjdzie burza! Po rzucie trzeba chwilę wyciągnąć sieć. Puste zarzucenie kosztuje rybę, seria trafień daje mnożnik.',
     unit: 'ryb', duration: 30, combo: true, medals: [40, 90, 153],
     background: 'radial-gradient(circle at 30% 20%, #5fb3cf, #1d6a8a)',
     outro: 'Piotr po nocy bez ryb złowił 153, bo posłuchał Jezusa (J 21,6-11).',

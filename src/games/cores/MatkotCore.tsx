@@ -13,7 +13,28 @@ const MILESTONES: Record<number, string> = {
   30: 'Legenda Tel Awiwu!',
   50: 'Mistrz matkot!',
 }
-const CROWD = ['🧍', '🧍‍♀️', '👀', '🙋', '🤳', '🧒', '👵', '🕺']
+// Skin, shirt and hair per spectator, so the crowd does not look cloned.
+const CROWD = [
+  ['#e8b48a', '#e4572e', '#3b2a20'], ['#8d5a3b', '#2a9d8f', '#1a1410'], ['#f1c9a5', '#f4d35e', '#c58b3a'],
+  ['#c68863', '#5b7fc7', '#2b1d15'], ['#6b4128', '#f28482', '#120c08'], ['#efc29c', '#84a59d', '#7a4b2a'],
+  ['#b07850', '#9b5de5', '#3a2618'], ['#e3a982', '#ffffff', '#d9d0c4'],
+]
+
+/** A flat beach figure. Arms up when cheering, a paddle in hand for the opponent. */
+function Figure({ skin, shirt, hair, paddle, cheer }: { skin: string; shirt: string; hair: string; paddle?: boolean; cheer?: boolean }) {
+  return (
+    <svg viewBox="0 0 40 64" aria-hidden="true">
+      <path d="M14 40 L13 62 M26 40 L27 62" stroke={skin} strokeWidth="5" strokeLinecap="round" />
+      <rect x="11" y="20" width="18" height="22" rx="6" fill={shirt} />
+      {cheer
+        ? <path d="M12 24 L5 10 M28 24 L35 10" stroke={skin} strokeWidth="4.5" strokeLinecap="round" />
+        : <path d="M12 24 L6 38 M28 24 L34 34" stroke={skin} strokeWidth="4.5" strokeLinecap="round" />}
+      {paddle && <ellipse cx="36" cy="28" rx="6" ry="7.5" fill="#d0503a" stroke="#8e2f20" strokeWidth="2" />}
+      <circle cx="20" cy="11" r="8" fill={skin} />
+      <path d="M12 10 a8 8 0 0 1 16 0 q-8 -4 -16 0z" fill={hair} />
+    </svg>
+  )
+}
 
 type Side = 'left' | 'right'
 interface Ball { p: number; dir: 1 | -1; v: number; x0: number; x1: number }
@@ -103,10 +124,13 @@ export function MatkotCore({ api }: CoreProps) {
   return (
     <div ref={root} className="core core--tap" onPointerDown={tap}>
       <div className="matkot__sea" />
-      <div className="matkot__crowd">{Array.from({ length: crowd }, (_, i) => <span key={i} style={{ animationDelay: `${(i % 4) * 0.1}s` }}>{CROWD[i % CROWD.length]}</span>)}</div>
+      <div className="matkot__crowd">{Array.from({ length: crowd }, (_, i) => {
+        const [skin, shirt, hair] = CROWD[i % CROWD.length]
+        return <span key={i} style={{ animationDelay: `${(i % 4) * 0.1}s` }}><Figure skin={skin} shirt={shirt} hair={hair} cheer={i % 2 === 0} /></span>
+      })}</div>
       {wind !== 0 && <div className="matkot__wind">💨 wiatr {wind > 0 ? '→' : '←'}</div>}
       {zone && <div className="matkot__zone" style={{ top: zone.top, height: zone.height }}><span /></div>}
-      <div className="sprite matkot__opponent">🧔‍♂️</div>
+      <div className="sprite matkot__opponent"><Figure skin="#c68863" shirt="#1f6fb2" hair="#2b1d15" paddle /></div>
       <div ref={shadowEl} className="sprite matkot__shadow" />
       <div ref={ballEl} className="sprite matkot__ball" />
       <div className="sprite matkot__paddle" data-side={paddle} />

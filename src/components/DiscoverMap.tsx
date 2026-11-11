@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { PLACES, TOP_PLACES, type PlaceId } from '../data/places'
-import { MAP_H, MAP_W, project } from '../lib/geo'
+import { MAP_W, project } from '../lib/geo'
 import { IsraelBase } from './IsraelBase'
 
 interface Props {
@@ -10,11 +10,16 @@ interface Props {
   onSelect: (id: PlaceId) => void
 }
 
+// Every place lies north of the Negev, so the map MUST show only Golan to Masada.
+const [, CROP_TOP] = project([33.45, 0])
+const [, CROP_BOTTOM] = project([30.95, 0])
+const VIEW_BOX = `0 ${CROP_TOP.toFixed(1)} ${MAP_W} ${(CROP_BOTTOM - CROP_TOP).toFixed(1)}`
+
 export function DiscoverMap({ active, seen, stamps, onSelect }: Props) {
   return (
     <div className="map">
       <div className="map__count">Odkryte: {seen.size} / {PLACES.length}</div>
-      <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} role="img" aria-label="Mapa miejsc do odkrycia">
+      <svg viewBox={VIEW_BOX} role="img" aria-label="Mapa miejsc do odkrycia">
         <IsraelBase />
         {TOP_PLACES.map((p, i) => {
           const [x, y] = project([p.lat, p.lon])

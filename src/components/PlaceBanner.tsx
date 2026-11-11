@@ -88,7 +88,7 @@ const SCENES: Record<PlaceId, ReactNode> = {
     <>
       <Sky id="g-galilee" stops={['#8cc8ea', '#f5efd8']} />
       <g className="b-rays" stroke="#fff3c4" strokeWidth="3" opacity=".6">
-        {[0, 30, 60, 90, 120, 150].map(a => <line key={a} x1="70" y1="30" x2={70 + Math.cos((a * Math.PI) / 180) * 40} y2={30 + Math.sin((a * Math.PI) / 180) * 40} />)}
+        {Array.from({ length: 12 }, (_, i) => i * 30).map((a, i) => <line key={a} x1="70" y1="30" x2={70 + Math.cos((a * Math.PI) / 180) * (i % 2 ? 30 : 40)} y2={30 + Math.sin((a * Math.PI) / 180) * (i % 2 ? 30 : 40)} strokeLinecap="round" />)}
       </g>
       <circle cx="70" cy="30" r="14" fill="#fff3c4" />
       <path d="M0,86 Q60,60 130,80 Q200,58 260,76 Q320,62 360,72 L360,150 L0,150Z" fill="#9fb59a" />

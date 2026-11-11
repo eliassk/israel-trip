@@ -7,9 +7,9 @@ const LABELS: { text: string; at: LatLon; cls: string; rotate?: number }[] = [
   { text: 'Morze Śródziemne', at: [32.3, 34.25], cls: 'map__sea', rotate: -72 },
   { text: 'LIBAN', at: [33.3, 35.4], cls: 'map__country' },
   { text: 'SYRIA', at: [33.35, 36.0], cls: 'map__country' },
-  { text: 'JORDANIA', at: [31.0, 35.95], cls: 'map__country' },
+  { text: 'JORDANIA', at: [31.6, 35.92], cls: 'map__country' },
   { text: 'EGIPT', at: [30.2, 34.15], cls: 'map__country' },
-  { text: 'ISRAEL', at: [30.45, 34.85], cls: 'map__israel' },
+  { text: 'ISRAEL', at: [31.12, 34.72], cls: 'map__israel' },
 ]
 
 export function IsraelBase({ labels = true }: { labels?: boolean }) {

@@ -1,13 +1,40 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CoreProps } from '../types'
 
-const ROW = 28
+const ROW = 44
 const BASE_W = 190
 const GROW = 12
 const QUAKE_EVERY = 10
 const QUAKE_SHIFT = 18
 
 interface Block { x: number; w: number }
+
+/** Judean hills, cypresses, a wooden builders' crane and birds behind the rising wall. */
+function Site() {
+  return (
+    <svg className="site" viewBox="0 0 400 700" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <circle cx="300" cy="190" r="46" fill="#fff1c9" opacity=".8" />
+      <g stroke="#a0703a" strokeWidth="2" fill="none" opacity=".55">
+        <path d="M70 140 q8 -7 16 0 q8 -7 16 0" /><path d="M120 110 q6 -5 12 0 q6 -5 12 0" /><path d="M330 120 q6 -5 12 0 q6 -5 12 0" />
+      </g>
+      <path d="M0 430 Q90 360 190 400 T400 370 V700 H0Z" fill="#e7b874" opacity=".75" />
+      <path d="M0 500 Q120 440 240 480 T400 460 V700 H0Z" fill="#d6a463" opacity=".8" />
+      <g fill="#7d8a52">
+        {[[30, 470], [52, 478], [356, 452], [378, 446]].map(([x, y]) => <path key={x} d={`M${x} ${y} q-7 -30 0 -62 q7 32 0 62z`} />)}
+      </g>
+      {/* A treadwheel crane like the ones that lifted Herod's ashlars. */}
+      <g stroke="#7a5430" strokeWidth="5" strokeLinecap="round" fill="none">
+        <path d="M22 700 L58 420 L94 700" />
+        <path d="M58 420 L150 380" />
+        <path d="M150 380 V470" strokeWidth="2" />
+        <circle cx="58" cy="640" r="34" strokeWidth="4" />
+        <path d="M24 640 H92 M58 606 V674" strokeWidth="2" />
+      </g>
+      <rect x="138" y="470" width="24" height="14" rx="2" fill="#d9c08a" stroke="#a88a52" strokeWidth="2" />
+      <path d="M0 640 Q200 610 400 640 V700 H0Z" fill="#c89657" />
+    </svg>
+  )
+}
 
 export function WallCore({ api }: CoreProps) {
   const root = useRef<HTMLDivElement>(null)
@@ -78,6 +105,7 @@ export function WallCore({ api }: CoreProps) {
 
   return (
     <div ref={root} className="core core--tap" onPointerDown={drop}>
+      <Site />
       {blocks.map((b, i) => <div key={i} className="ashlar" style={{ left: b.x, top: y(i), width: b.w, height: ROW - 3 }} />)}
       {blocks.length > 0 && <div ref={mover} className="ashlar ashlar--moving" style={{ left: 0, top: y(blocks.length), width: pos.current.w, height: ROW - 3 }} />}
     </div>

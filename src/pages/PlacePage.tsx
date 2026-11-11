@@ -1,10 +1,11 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { TOP_PLACES, childrenOf, placeById, type Place, type PlaceId } from '../data/places'
 import { go, href } from '../lib/router'
 import { TOYS } from '../toys'
 import { PlaceBanner } from '../components/PlaceBanner'
 import { Quiz } from '../components/Quiz'
 import { PlaceTile } from '../components/PlaceTile'
+import { VERSES } from '../data/verses'
 
 interface Props { place: Place; seen: Set<PlaceId>; stamps: Set<PlaceId>; onStamp: () => void }
 
@@ -49,19 +50,19 @@ export function PlacePage({ place, seen, stamps, onStamp }: Props) {
             </div>
           </section>
         )}
-        <ul className="facts">{place.facts.map(f => <li key={f}>{f}</li>)}</ul>
+        <ul className="facts">{place.facts.map(f => typeof f === 'string'
+          ? <li key={f}>{f}</li>
+          : <li key={f.ref} className="facts__verse"><blockquote className="verse">„{f.text}”<small>{f.ref} · Biblia Warszawska</small></blockquote></li>)}</ul>
         {place.bible && (
           <section className="bible">
             <b className="bible__label">W Biblii</b>
             <ol className="bible__list">
               {place.bible.map(b => (
-                <li key={b.ref}><span className="bible__ref">{b.ref}</span><span>{b.event}</span></li>
+                <BibleItem key={b.ref} where={b.where} reference={b.ref} />
               ))}
             </ol>
           </section>
         )}
-        {place.verse && <blockquote className="verse">„{place.verse.text}”<small>{place.verse.ref} · Biblia Warszawska</small></blockquote>}
-        <div className="tip"><b>Do plecaka</b>{place.tip}</div>
         <section className="play">
           <b className="play__label">{toy ? 'Zabawa' : 'Pytanie'}{stamped && ' · pieczątka zdobyta ✓'}</b>
           {toy ? (
@@ -77,5 +78,31 @@ export function PlacePage({ place, seen, stamps, onStamp }: Props) {
         </nav>
       </div>
     </article>
+  )
+}
+
+const LONG = 140
+
+function BibleItem({ where, reference }: { where: string; reference: string }) {
+  const [open, setOpen] = useState(false)
+  const verse = VERSES[reference]
+  const long = !!verse && verse.text.length > LONG
+  return (
+    <li>
+      <span className="bible__ref">{reference}</span>
+      <div className="bible__body">
+        <span className="bible__where">{where}</span>
+        {verse && (
+          <blockquote className={'bible__quote' + (long && !open ? ' is-clamped' : '')}>
+            „{verse.text}”{verse.at && <small> {verse.at}</small>}
+          </blockquote>
+        )}
+        {long && (
+          <button className="bible__more" onClick={() => setOpen(o => !o)} aria-expanded={open}>
+            {open ? 'Zwiń' : 'Rozwiń'}
+          </button>
+        )}
+      </div>
+    </li>
   )
 }

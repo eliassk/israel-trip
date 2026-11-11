@@ -6,7 +6,9 @@ import { initTelegram, tgStartParam } from './lib/telegram'
 
 initTelegram()
 // A shared link opens the Mini App with `startapp=gry-polow`; Telegram only allows [A-Za-z0-9_-], so the path uses dashes.
-if (tgStartParam && !location.hash) location.hash = '#/' + tgStartParam.replace(/-/g, '/')
+// Telegram puts its launch data (`#tgWebAppData=…`) in the hash, so that hash MUST count as no route.
+const routed = location.hash.startsWith('#/')
+if (tgStartParam && !routed) history.replaceState(null, '', '#/' + tgStartParam.replace(/-/g, '/'))
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
